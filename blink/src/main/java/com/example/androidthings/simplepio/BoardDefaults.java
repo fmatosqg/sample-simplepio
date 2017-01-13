@@ -35,19 +35,31 @@ public class BoardDefaults {
      * For example, on Intel Edison Arduino breakout, pin "IO13" is connected to an onboard LED
      * that turns on when the GPIO pin is HIGH, and off when low.
      */
-    public static String getGPIOForLED() {
+    public static String getGPIOForRedLED() {
         switch (getBoardVariant()) {
             case DEVICE_EDISON_ARDUINO:
                 return "IO13";
             case DEVICE_EDISON:
                 return "GP45";
             case DEVICE_RPI3:
-                return "BCM6";
+                return "BCM5";
             case DEVICE_NXP:
                 return "GPIO4_IO20";
             default:
                 throw new IllegalStateException("Unknown Build.DEVICE " + Build.DEVICE);
         }
+    }
+
+    public static String getGPIOForGreenLED() {
+        return "BCM6";
+    }
+
+    public static String getGPIOForBlueLED() {
+        return "BCM13";
+    }
+
+    public static String getGPIOForButton() {
+        return "BCM26";
     }
 
     private static String getBoardVariant() {
