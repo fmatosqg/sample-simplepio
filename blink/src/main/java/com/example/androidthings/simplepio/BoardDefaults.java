@@ -62,6 +62,15 @@ public class BoardDefaults {
         return "BCM26";
     }
 
+    public static String getGpioForVcc() {
+        return "BCM24";
+    }
+
+    public static String getGpioForBuzzer() {
+        return "BCM23";
+    }
+
+
     private static String getBoardVariant() {
         if (!sBoardVariant.isEmpty()) {
             return sBoardVariant;

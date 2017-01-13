@@ -46,6 +46,7 @@ public class BlinkActivity extends Activity {
 
     private Gpio mButtonGpio;
     private boolean isPressed = false;
+    private BuzzerController buzzerController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,9 @@ public class BlinkActivity extends Activity {
                     return true;
                 }
             });
+
+             buzzerController = new BuzzerController();
+            buzzerController.init();
 
             Log.i(TAG, "Start blinking LED GPIO pin");
             // Post a Runnable that continuously switch the state of the GPIO, blinking the
@@ -121,6 +125,7 @@ public class BlinkActivity extends Activity {
                 if (isPressed) {
                     isPressed = false;
                     mRedLedGpio.setValue(!mRedLedGpio.getValue());
+                    buzzerController.buzz();
                 }
 
                 Log.d(TAG, "State set to " + mBlueLedGpio.getValue() + "/" + mRedLedGpio.getValue());
