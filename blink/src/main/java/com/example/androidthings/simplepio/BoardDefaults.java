@@ -67,7 +67,11 @@ public class BoardDefaults {
     }
 
     public static String getGpioForBuzzer() {
-        return "BCM23";
+        return "BCM12";
+    }
+
+    public static String getPwm0() {
+        return "PWM0";
     }
 
 

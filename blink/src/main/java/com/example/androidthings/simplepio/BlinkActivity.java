@@ -74,13 +74,19 @@ public class BlinkActivity extends Activity {
                 public boolean onGpioEdge(Gpio gpio) {
                     Log.i(TAG, "GPIO changed, button pressed");
 
+                    try {
+                        mGreenLedGpio.setValue(!mGreenLedGpio.getValue());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     isPressed = true;
                     return true;
                 }
             });
 
-             buzzerController = new BuzzerController();
+            buzzerController = new BuzzerController();
             buzzerController.init();
+            buzzerController.buzz(200);
 
             Log.i(TAG, "Start blinking LED GPIO pin");
             // Post a Runnable that continuously switch the state of the GPIO, blinking the
@@ -101,6 +107,10 @@ public class BlinkActivity extends Activity {
         Log.i(TAG, "Closing LED GPIO pin");
         try {
             mRedLedGpio.close();
+            mGreenLedGpio.close();
+            mBlueLedGpio.close();
+            mButtonGpio.close();
+            buzzerController.destroy();
         } catch (IOException e) {
             Log.e(TAG, "Error on PeripheralIO API", e);
         } finally {
@@ -124,8 +134,8 @@ public class BlinkActivity extends Activity {
 
                 if (isPressed) {
                     isPressed = false;
-                    mRedLedGpio.setValue(!mRedLedGpio.getValue());
-                    buzzerController.buzz();
+//                    mRedLedGpio.setValue(!mRedLedGpio.getValue());
+                    buzzerController.buzz(3000);
                 }
 
                 Log.d(TAG, "State set to " + mBlueLedGpio.getValue() + "/" + mRedLedGpio.getValue());
