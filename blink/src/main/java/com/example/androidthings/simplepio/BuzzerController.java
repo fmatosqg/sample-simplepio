@@ -2,6 +2,7 @@ package com.example.androidthings.simplepio;
 
 import android.os.Handler;
 import android.util.Log;
+import android.util.TimingLogger;
 
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManagerService;
@@ -14,7 +15,7 @@ import java.io.IOException;
  */
 public class BuzzerController {
 
-    private static final String TAG = BuzzerController.class.getCanonicalName();
+    private static final String TAG = BuzzerController.class.getSimpleName();
 
 
     private static final long BUZZ_LENGHT_MS = 2000;
@@ -50,20 +51,32 @@ public class BuzzerController {
 
                     Log.i(TAG, "Start");
 
-                    long start = System.currentTimeMillis();
-                    long end = start + buzzLenght;
+                    long start = System.nanoTime();
+                    long end = start + 100 * 1000 * 1000;//buzzLenght;
 
                     int count = 0;
                     boolean flag = true;
-                    while (end > System.currentTimeMillis()) {
-                        Thread.sleep(0, 100);
-                        buzzer.setValue(flag);
-                        flag = !flag;
-                        count++;
-                    }
+                    TimingLogger timings = new TimingLogger(TAG, "sleep");
+                    while (end > System.nanoTime()) {
 
-                    Log.i(TAG, "End, count = " + count);
-                } catch (InterruptedException e) {
+                        for (int i = 0; i < 10; i++) {
+                            busySleep(0.02f);
+                            buzzer.setValue(flag);
+                            flag = !flag;
+                            count++;
+                        }
+                    }
+                    float tElapsed = System.nanoTime() - start;
+                    timings.dumpToLog();
+
+                    TimingLogger timings2 = new TimingLogger(TAG, "log");
+
+
+                    tElapsed = tElapsed / 1000.0f / 1000.0f / 1000.0f;
+                    float f =  (float) count / tElapsed;
+                    Log.i(TAG, "End, count = " + count +  " time = " + tElapsed + " s " + " freq  = " + f + " Hz");
+                    timings2.dumpToLog();
+//                } catch (InterruptedException e) {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -71,6 +84,18 @@ public class BuzzerController {
         });
 
         th.start();
+
+    }
+
+    private void busySleep(float sleepMs) {
+        long endNano = System.nanoTime() + (int) (1000.0f * 1000.0f * sleepMs);
+
+        // Note: System.nanoTime is approx 10x faster than SystemClock equivalent ( like 4 us per call )
+        int c = 0;
+        while (System.nanoTime() < endNano)
+            c++;
+
+        Log.i(TAG, "Secondary count  = " + c);
 
     }
 
