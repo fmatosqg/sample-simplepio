@@ -52,29 +52,36 @@ public class BuzzerController {
                     Log.i(TAG, "Start");
 
                     long start = System.nanoTime();
-                    long end = start + 100 * 1000 * 1000;//buzzLenght;
+//                    long end = start + 100 * 1000 * 1000;//buzzLenght;
 
                     int count = 0;
-                    boolean flag = true;
-                    TimingLogger timings = new TimingLogger(TAG, "sleep");
-                    while (end > System.nanoTime()) {
-
-                        for (int i = 0; i < 10; i++) {
-                            busySleep(0.02f);
-                            buzzer.setValue(flag);
-                            flag = !flag;
-                            count++;
-                        }
+//                    boolean flag = true;
+//                    TimingLogger timings = new TimingLogger(TAG, "sleep");
+//                    while (end > System.nanoTime()) {
+//
+//                        for (int i = 0; i < 10; i++) {
+//                            busySleep(0.02f);
+//                            buzzer.setValue(flag);
+//                            flag = !flag;
+//                            count++;
+//                        }
+//                    }
+                    count = 400;
+                    for (int i = count; i > 0; i--) {
+                        buzzer.setValue(true);
+                        buzzer.setValue(false);
                     }
-                    float tElapsed = System.nanoTime() - start;
-                    timings.dumpToLog();
 
+                    float tElapsed = System.nanoTime() - start;
+//                    timings.dumpToLog();
+
+                    count = count*2;
                     TimingLogger timings2 = new TimingLogger(TAG, "log");
 
 
                     tElapsed = tElapsed / 1000.0f / 1000.0f / 1000.0f;
-                    float f =  (float) count / tElapsed;
-                    Log.i(TAG, "End, count = " + count +  " time = " + tElapsed + " s " + " freq  = " + f + " Hz");
+                    float f = (float) count / tElapsed;
+                    Log.i(TAG, "End, count = " + count + " time = " + tElapsed + " s " + " freq  = " + f + " Hz");
                     timings2.dumpToLog();
 //                } catch (InterruptedException e) {
                 } catch (IOException e) {

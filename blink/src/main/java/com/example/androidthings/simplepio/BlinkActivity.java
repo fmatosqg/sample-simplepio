@@ -18,6 +18,7 @@ package com.example.androidthings.simplepio;
 
 import android.app.Activity;
 
+import com.example.androidthings.simplepio.controller.ServoController;
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.GpioCallback;
 import com.google.android.things.pio.PeripheralManagerService;
@@ -48,6 +49,9 @@ public class BlinkActivity extends Activity {
     private boolean isPressed = false;
     private BuzzerController buzzerController;
 
+
+    private ServoController servoController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +59,7 @@ public class BlinkActivity extends Activity {
 
         PeripheralManagerService service = new PeripheralManagerService();
         try {
+            servoController = new ServoController(ServoController.getPwm0Pin(),20.0,2.0,1.0);
 
             mRedLedGpio = service.openGpio(BoardDefaults.getGPIOForRedLED());
             mRedLedGpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
@@ -136,6 +141,12 @@ public class BlinkActivity extends Activity {
                     isPressed = false;
 //                    mRedLedGpio.setValue(!mRedLedGpio.getValue());
                     buzzerController.buzz(3000);
+                }
+
+                if ( mBlueLedGpio.getValue() ) {
+                    servoController.setPosition(0);
+                } else {
+                    servoController.setPosition(180);
                 }
 
                 Log.d(TAG, "State set to " + mBlueLedGpio.getValue() + "/" + mRedLedGpio.getValue());
