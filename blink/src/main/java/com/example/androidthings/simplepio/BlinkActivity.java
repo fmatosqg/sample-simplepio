@@ -19,6 +19,7 @@ package com.example.androidthings.simplepio;
 import android.app.Activity;
 
 import com.example.androidthings.simplepio.controller.ServoController;
+import com.example.androidthings.simplepio.ndktest.Ndktest;
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.GpioCallback;
 import com.google.android.things.pio.PeripheralManagerService;
@@ -51,11 +52,14 @@ public class BlinkActivity extends Activity {
 
 
     private ServoController servoController;
+    private Ndktest ndkTest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "Starting BlinkActivity");
+
+        ndkTest = new Ndktest();
 
         PeripheralManagerService service = new PeripheralManagerService();
         try {
