@@ -18,6 +18,7 @@ package com.example.androidthings.simplepio;
 
 import android.app.Activity;
 
+import com.example.androidthings.simplepio.audio.AudioController;
 import com.example.androidthings.simplepio.controller.ServoController;
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.GpioCallback;
@@ -51,6 +52,7 @@ public class BlinkActivity extends Activity {
 
 
     private ServoController servoController;
+    private AudioController audioController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,7 @@ public class BlinkActivity extends Activity {
         PeripheralManagerService service = new PeripheralManagerService();
         try {
             servoController = new ServoController(ServoController.getPwm0Pin(),20.0,2.0,1.0);
+            audioController = new AudioController(this);
 
             mRedLedGpio = service.openGpio(BoardDefaults.getGPIOForRedLED());
             mRedLedGpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
@@ -91,7 +94,7 @@ public class BlinkActivity extends Activity {
 
             buzzerController = new BuzzerController();
             buzzerController.init();
-            buzzerController.buzz(200);
+            buzzerController.buzz(20);
 
             Log.i(TAG, "Start blinking LED GPIO pin");
             // Post a Runnable that continuously switch the state of the GPIO, blinking the
@@ -110,6 +113,11 @@ public class BlinkActivity extends Activity {
         mHandler.removeCallbacks(mBlinkRunnable);
         // Close the Gpio pin.
         Log.i(TAG, "Closing LED GPIO pin");
+
+        if ( audioController != null) {
+            audioController.destroy();
+            audioController = null;
+        }
         try {
             mRedLedGpio.close();
             mGreenLedGpio.close();

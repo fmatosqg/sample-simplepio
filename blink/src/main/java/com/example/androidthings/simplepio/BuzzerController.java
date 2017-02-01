@@ -66,7 +66,7 @@ public class BuzzerController {
 //                            count++;
 //                        }
 //                    }
-                    count = 400;
+                    count = buzzLenght;
                     for (int i = count; i > 0; i--) {
                         buzzer.setValue(true);
                         buzzer.setValue(false);

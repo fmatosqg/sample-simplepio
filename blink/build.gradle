@@ -53,4 +53,6 @@ android {
 
 dependencies {
     provided 'com.google.android.things:androidthings:0.1-devpreview'
+    compile 'com.android.support:support-annotations:22.0.0'
+
 }
