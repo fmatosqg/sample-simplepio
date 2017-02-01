@@ -27,11 +27,12 @@ public class AudioController {
             @Override
             public void run() {
                 try {
-                    while(true) {
-                        Log.i(TAG, "Play glass NOW");
-                        soundFacade.playTest();
-                        Thread.sleep(4000);
-                    }
+//                    while(true) {
+                    Thread.sleep(4000);
+                    Log.i(TAG, "Play glass NOW");
+                    soundFacade.playTest();
+
+//                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
